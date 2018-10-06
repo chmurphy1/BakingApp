@@ -8,7 +8,7 @@ public class NetworkUtils {
 
     //This will check to see if we have a connection to
     //the internet
-    public boolean hasInternetService(Context con){
+    public static boolean hasInternetService(Context con){
         boolean hasService = false;
 
         ConnectivityManager cm = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
