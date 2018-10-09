@@ -1,7 +1,13 @@
 package murphy.christopher.bakingapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import murphy.christopher.bakingapp.model.Recipe;
 import murphy.christopher.bakingapp.utils.NetworkUtils;
 import murphy.christopher.bakingapp.utils.RetrofitUtils;
@@ -14,13 +20,49 @@ import murphy.christopher.bakingapp.interfaces.GetRecipeDataService;
 public class MainActivity extends AppCompatActivity {
 
     private List<Recipe> recipeList;
+    private GridLayoutManager mLayoutManager;
+
+    @BindView(R.id.RecipeCardView)
+    private RecyclerView mCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
+
+        setLayoutManager();
         getAllRecipes();
+    }
+    /*
+     *  This method will set the layout manager for a tablet,
+     *  a phone in portrait mode and a phone in landscape mode.
+     *
+     *  I learned this really cool trick by reading tack overflow.
+     *  https://stackoverflow.com/questions/9279111/determine-if-the-device-is-a-smartphone-or-tablet
+     */
+    public void setLayoutManager(){
+        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+
+        //First test if it is a tablet
+        if(isTablet){
+            mLayoutManager = mLayoutManager = new GridLayoutManager(this, 3);
+        }
+        else{
+            //if it isn't a tablet test to see if it is in landscape mode else
+            //it's in portrait mode.
+            boolean isLandscape = getResources().getBoolean(R.bool.isLandscape);
+            if(isLandscape){
+                mLayoutManager = mLayoutManager = new GridLayoutManager(this, 2);
+            }
+            else{
+                mLayoutManager = mLayoutManager = new GridLayoutManager(this, 1);
+            }
+        }
+    }
+    public void setupRecyclerView(){
+        mCardView.setLayoutManager(mLayoutManager);
     }
     public void getAllRecipes(){
         //Get instance of retrofit
