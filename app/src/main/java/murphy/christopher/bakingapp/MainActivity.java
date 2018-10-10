@@ -8,6 +8,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import murphy.christopher.bakingapp.adapter.RecipesAdapter;
 import murphy.christopher.bakingapp.model.Recipe;
 import murphy.christopher.bakingapp.utils.NetworkUtils;
 import murphy.christopher.bakingapp.utils.RetrofitUtils;
@@ -21,9 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Recipe> recipeList;
     private GridLayoutManager mLayoutManager;
+    private RecipesAdapter rAdapter;
 
     @BindView(R.id.RecipeCardView)
-    private RecyclerView mCardView;
+    RecyclerView mCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +46,21 @@ public class MainActivity extends AppCompatActivity {
      */
     public void setLayoutManager(){
         boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+        boolean isLandscape = getResources().getBoolean(R.bool.isLandscape);
 
         //First test if it is a tablet
         if(isTablet){
-            mLayoutManager = mLayoutManager = new GridLayoutManager(this, 3);
+            if(isLandscape){
+                mLayoutManager = mLayoutManager = new GridLayoutManager(this, 3);
+            }
+            else{
+                mLayoutManager = mLayoutManager = new GridLayoutManager(this, 2);
+            }
+
         }
         else{
             //if it isn't a tablet test to see if it is in landscape mode else
             //it's in portrait mode.
-            boolean isLandscape = getResources().getBoolean(R.bool.isLandscape);
             if(isLandscape){
                 mLayoutManager = mLayoutManager = new GridLayoutManager(this, 2);
             }
@@ -63,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public void setupRecyclerView(){
         mCardView.setLayoutManager(mLayoutManager);
+        mCardView.setHasFixedSize(true);
+        rAdapter = new RecipesAdapter(recipeList);
+        mCardView.setAdapter(rAdapter);
     }
     public void getAllRecipes(){
         //Get instance of retrofit
@@ -79,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                     recipeList = response.body();
+                    setupRecyclerView();
                 }
 
                 @Override
