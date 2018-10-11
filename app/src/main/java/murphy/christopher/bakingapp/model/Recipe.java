@@ -5,8 +5,8 @@ import java.util.List;
 public class Recipe {
     private int id;
     private String name;
-    private List<Ingredients> ingredientsList;
-    private List<Steps> stepsList;
+    private List<Ingredients> ingredients;
+    private List<Steps> steps;
     private int servings;
     private String image;
 
@@ -26,20 +26,20 @@ public class Recipe {
         this.name = name;
     }
 
-    public List<Ingredients> getIngredientsList() {
-        return ingredientsList;
+    public List<Ingredients> getIngredients() {
+        return ingredients;
     }
 
-    public void setIngredientsList(List<Ingredients> ingredientsList) {
-        this.ingredientsList = ingredientsList;
+    public void setIngredientsList(List<Ingredients> ingredients) {
+        this.ingredients = ingredients;
     }
 
-    public List<Steps> getStepsList() {
-        return stepsList;
+    public List<Steps> getSteps() {
+        return steps;
     }
 
-    public void setStepsList(List<Steps> stepsList) {
-        this.stepsList = stepsList;
+    public void setSteps(List<Steps> steps) {
+        this.steps = steps;
     }
 
     public int getServings() {
