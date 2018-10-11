@@ -1,12 +1,44 @@
 package murphy.christopher.bakingapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
+
+@Parcel(Parcel.Serialization.BEAN)
 public class Steps {
 
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("shortDescription")
     private String shortDescription;
+
+    @SerializedName("description")
     private String description;
+
+    @SerializedName("videoURL")
     private String videoURL;
+
+    @SerializedName("thumbnailURL")
     private String thumbnailURL;
+
+    public Steps(){
+        this.id = 0;
+        this.shortDescription = "";
+        this.description = "";
+        this.videoURL = "";
+        this.thumbnailURL = "";
+    }
+
+    @ParcelConstructor
+    public Steps(int id, String shortDescription, String description, String videoURL, String thumbnailURL){
+        this.id = id;
+        this.shortDescription = shortDescription;
+        this.description = description;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
+    }
 
     public int getId() {
         return id;
