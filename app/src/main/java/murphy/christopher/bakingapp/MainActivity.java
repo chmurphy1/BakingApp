@@ -3,13 +3,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
+import org.parceler.Parcels;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import murphy.christopher.bakingapp.adapter.RecipesAdapter;
 import murphy.christopher.bakingapp.model.Recipe;
+import murphy.christopher.bakingapp.utils.Constants;
 import murphy.christopher.bakingapp.utils.NetworkUtils;
 import murphy.christopher.bakingapp.utils.RetrofitUtils;
 import retrofit2.Call;
@@ -35,8 +35,16 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setLayoutManager();
-        setupRecyclerView();
-        getAllRecipes();
+
+        //Restore rAdapter and setup the recyclerview
+        if(savedInstanceState != null){
+            rAdapter = Parcels.unwrap(savedInstanceState.getParcelable(Constants.RECIPE_ADAPTER_KEY));
+            setupRecyclerView();
+        }
+        else{
+            setupRecyclerView();
+            getAllRecipes();
+        }
     }
     /*
      *  This method will set the layout manager for a tablet,
@@ -74,11 +82,10 @@ public class MainActivity extends AppCompatActivity {
         mCardView.setLayoutManager(mLayoutManager);
         mCardView.setHasFixedSize(true);
 
-        if(recipeList == null) {
+        if(rAdapter == null) {
             rAdapter = new RecipesAdapter();
-        }else{
-            rAdapter = new RecipesAdapter(recipeList);
         }
+
         mCardView.setAdapter(rAdapter);
     }
     public void getAllRecipes(){
@@ -95,7 +102,8 @@ public class MainActivity extends AppCompatActivity {
             recipes.enqueue(new Callback<List<Recipe>>() {
                 @Override
                 public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                    recipeList = response.body();
+                    //recipeList = response.body();
+                    rAdapter = new RecipesAdapter(response.body());
                     setupRecyclerView();
                 }
 
@@ -107,5 +115,12 @@ public class MainActivity extends AppCompatActivity {
         }else{
             //put some toast in here
         }
+    }
+
+    //Save rAdapter whenever there is a change
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Constants.RECIPE_ADAPTER_KEY, Parcels.wrap(rAdapter));
     }
 }

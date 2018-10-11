@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import murphy.christopher.bakingapp.R;
 import murphy.christopher.bakingapp.model.Recipe;
 import murphy.christopher.bakingapp.view_holders.RecipeViewHolder;
 
+@Parcel(Parcel.Serialization.BEAN)
 public class RecipesAdapter extends RecyclerView.Adapter<RecipeViewHolder>{
 
     private List<Recipe> recipes;
