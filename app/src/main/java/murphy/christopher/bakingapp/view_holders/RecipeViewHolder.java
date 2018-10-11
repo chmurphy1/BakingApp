@@ -1,14 +1,21 @@
 package murphy.christopher.bakingapp.view_holders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import murphy.christopher.bakingapp.R;
+import murphy.christopher.bakingapp.RecipeDetails;
 import murphy.christopher.bakingapp.model.Recipe;
+import murphy.christopher.bakingapp.utils.Constants;
 
 public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
@@ -26,5 +33,11 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
     public void bind(Recipe recipe){
         this.recipe = recipe;
         cardName.setText(recipe.getName());
+    }
+    @OnClick(R.id.RecipeCard)
+    public void onClickCar(){
+        Intent recipeIntent = new Intent(context, RecipeDetails.class);
+        recipeIntent.putExtra(Constants.RECIPE_KEY, Parcels.wrap(recipe));
+        context.startActivity(recipeIntent);
     }
 }
