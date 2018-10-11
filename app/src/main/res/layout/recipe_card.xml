@@ -10,7 +10,8 @@
         android:layout_marginStart="14dp"
         android:layout_marginEnd="12dp"
         android:layout_marginTop="14dp"
-        android:id="@+id/RecipeCard">
+        android:id="@+id/RecipeCard"
+        android:clickable="true">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
