@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setLayoutManager();
+        setupRecyclerView();
         getAllRecipes();
     }
     /*
@@ -72,7 +73,12 @@ public class MainActivity extends AppCompatActivity {
     public void setupRecyclerView(){
         mCardView.setLayoutManager(mLayoutManager);
         mCardView.setHasFixedSize(true);
-        rAdapter = new RecipesAdapter(recipeList);
+
+        if(recipeList == null) {
+            rAdapter = new RecipesAdapter();
+        }else{
+            rAdapter = new RecipesAdapter(recipeList);
+        }
         mCardView.setAdapter(rAdapter);
     }
     public void getAllRecipes(){
