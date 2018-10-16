@@ -13,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import murphy.christopher.bakingapp.R;
-import murphy.christopher.bakingapp.RecipeDetails;
+import murphy.christopher.bakingapp.RecipeDetailsActivity;
 import murphy.christopher.bakingapp.model.Recipe;
 import murphy.christopher.bakingapp.utils.Constants;
 
@@ -35,8 +35,8 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
         cardName.setText(recipe.getName());
     }
     @OnClick(R.id.RecipeCard)
-    public void onClickCar(){
-        Intent recipeIntent = new Intent(context, RecipeDetails.class);
+    public void onClickCard(){
+        Intent recipeIntent = new Intent(context, RecipeDetailsActivity.class);
         recipeIntent.putExtra(Constants.RECIPE_KEY, Parcels.wrap(recipe));
         context.startActivity(recipeIntent);
     }
