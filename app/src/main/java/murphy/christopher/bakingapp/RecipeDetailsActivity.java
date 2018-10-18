@@ -24,54 +24,42 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
 
-        Intent intent = getIntent();
-        recipeDetails = Parcels.unwrap(intent.getParcelableExtra(Constants.RECIPE_KEY));
+        if(savedInstanceState != null){
+            recipeDetails = savedInstanceState.getParcelable(Constants.RECIPE_KEY);
+        }
+        else{
+            Intent intent = getIntent();
+            recipeDetails = Parcels.unwrap(intent.getParcelableExtra(Constants.RECIPE_KEY));
+        }
 
         //If the device is a tablet, setup the tablet.  Otherwise,
         //treat the device like a phone
         boolean isTablet = getResources().getBoolean(R.bool.isTablet);
         if(isTablet){
-            setupTablet();
+            //Set the orientation for a tablet to landscape.
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
-        else{
-            setupPhone();
-        }
-
-    }
-    //This method will setup the layout and fragments for a tablet
-    public void setupTablet(){
-        //Set the orientation for a tablet to landscape.
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         FragmentManager mgr = getSupportFragmentManager();
 
         //These are the fragments that will be loaded in this activity
         //for the tablet.
         RecipeDetailFragment detailFragment = new RecipeDetailFragment();
-        RecipeInstructionFragment instructionFragment = new RecipeInstructionFragment();
+
+        //Save the recipe details to use in the fragment
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(Constants.RECIPE_KEY, Parcels.wrap(recipeDetails));
+        detailFragment.setArguments(arguments);
 
         //Add the fragment for the recipe details to the fragment manager
         mgr.beginTransaction()
                 .add(R.id.recipeDetailFragment, detailFragment)
                 .commit();
-
-        //Add the fragment for the recipe instructions to the fragment manager
-        /*
-        mgr.beginTransaction()
-                .add(R.id.recipeDetailInstructions, instructionFragment)
-                .commit();
-                */
     }
-    public void setupPhone(){
-        FragmentManager mgr = getSupportFragmentManager();
 
-        //Only the recipe detail Fragment will be loaded since the phone's
-        //screen is only large enough to handle one fragment.
-        RecipeDetailFragment detailFragment = new RecipeDetailFragment();
-
-        //Add the fragment for the recipe details to the fragment manager
-        mgr.beginTransaction()
-                .add(R.id.recipeDetailFragment, detailFragment)
-                .commit();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Constants.RECIPE_KEY, Parcels.wrap(recipeDetails));
     }
 }

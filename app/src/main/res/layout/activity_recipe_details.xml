@@ -5,9 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".RecipeDetailsActivity">
 
-    <fragment
+    <FrameLayout
         android:id="@+id/recipeDetailFragment"
-        android:name="murphy.christopher.bakingapp.fragments.RecipeDetailFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
