@@ -2,20 +2,17 @@ package murphy.christopher.bakingapp;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import org.parceler.Parcels;
 
-import butterknife.BindView;
 import murphy.christopher.bakingapp.fragments.RecipeDetailFragment;
-import murphy.christopher.bakingapp.fragments.RecipeInstructionFragment;
 import murphy.christopher.bakingapp.model.Recipe;
 import murphy.christopher.bakingapp.utils.Constants;
 
-public class RecipeDetailsActivity extends AppCompatActivity {
+public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailFragment.RecipeDetailFragmentCallback{
 
     private Recipe recipeDetails;
 
@@ -61,5 +58,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(Constants.RECIPE_KEY, Parcels.wrap(recipeDetails));
+    }
+
+    @Override
+    public void onclick(Object data) {
+        System.out.println("tablet");
     }
 }

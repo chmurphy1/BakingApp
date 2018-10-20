@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import murphy.christopher.bakingapp.R;
+import murphy.christopher.bakingapp.interfaces.RecipeDetailCallback;
 import murphy.christopher.bakingapp.view_holders.RecipeDetailViewHolder;
-import murphy.christopher.bakingapp.view_holders.RecipeViewHolder;
 
 public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailViewHolder> {
 
     private ArrayList ingredientsAndSteps;
+    private RecipeDetailCallback rdListener;
 
     public RecipeDetailsAdapter(){
         ingredientsAndSteps = new ArrayList();
@@ -24,6 +25,10 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailViewH
         this.ingredientsAndSteps = items;
     }
 
+    public RecipeDetailsAdapter(ArrayList items, RecipeDetailCallback listener){
+        this.ingredientsAndSteps = items;
+        this.rdListener = listener;
+    }
     @NonNull
     @Override
     public RecipeDetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -31,7 +36,12 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailViewH
         LayoutInflater mInflater = LayoutInflater.from(context);
         View v = mInflater.inflate(R.layout.recipe_detail_card_layout, parent,false);
 
-        return new RecipeDetailViewHolder(v);
+        if(rdListener != null){
+            return new RecipeDetailViewHolder(v, rdListener);
+        }
+        else {
+            return new RecipeDetailViewHolder(v);
+        }
     }
 
     @Override

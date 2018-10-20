@@ -4,24 +4,24 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import murphy.christopher.bakingapp.R;
+import murphy.christopher.bakingapp.interfaces.RecipeDetailCallback;
 import murphy.christopher.bakingapp.model.IngredientWrapper;
 import murphy.christopher.bakingapp.model.Ingredients;
-import murphy.christopher.bakingapp.model.Recipe;
 import murphy.christopher.bakingapp.model.Steps;
 import murphy.christopher.bakingapp.utils.Constants;
 
 public class RecipeDetailViewHolder extends RecyclerView.ViewHolder {
 
-
     private Context context;
     private List<Ingredients> listOfIngredients;
     private Steps singleStep;
+    private RecipeDetailCallback rdListener;
+    private View itemView;
 
     @BindView(R.id.recipeDetailName)
     TextView cardDetailName;
@@ -29,6 +29,15 @@ public class RecipeDetailViewHolder extends RecyclerView.ViewHolder {
     public RecipeDetailViewHolder(View itemView) {
         super(itemView);
         context = itemView.getContext();
+        this.itemView = itemView;
+        ButterKnife.bind(this, itemView);
+    }
+
+    public RecipeDetailViewHolder(View itemView, RecipeDetailCallback listener) {
+        super(itemView);
+        context = itemView.getContext();
+        this.itemView = itemView;
+        this.rdListener = listener;
         ButterKnife.bind(this, itemView);
     }
 
@@ -41,6 +50,26 @@ public class RecipeDetailViewHolder extends RecyclerView.ViewHolder {
         else if(o instanceof Steps){
             singleStep = (Steps) o;
             cardDetailName.setText(singleStep.getShortDescription());
+        }
+    }
+
+    @OnClick(R.id.RecipeDetailCard)
+    public void onCardClick(){
+
+        //rdListener will not be null when the application is ran
+        //on a tablet
+        if(rdListener != null){
+            //check to see if we have a list of incredients or
+            //a set of steps
+            if(listOfIngredients != null){
+                rdListener.onRecipeDetailCardClick((Object) listOfIngredients);
+            }
+            else if(singleStep != null){
+                rdListener.onRecipeDetailCardClick((Object) singleStep);
+            }
+        }
+        else{
+            System.out.println("phone");
         }
     }
 }
