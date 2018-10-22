@@ -1,15 +1,19 @@
 package murphy.christopher.bakingapp.view_holders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import org.parceler.Parcels;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import murphy.christopher.bakingapp.R;
+import murphy.christopher.bakingapp.StepsAndInstructionDetailActivity;
 import murphy.christopher.bakingapp.interfaces.RecipeDetailCallback;
+import murphy.christopher.bakingapp.model.DataWrapper;
 import murphy.christopher.bakingapp.model.IngredientWrapper;
 import murphy.christopher.bakingapp.model.Ingredients;
 import murphy.christopher.bakingapp.model.Steps;
@@ -69,7 +73,19 @@ public class RecipeDetailViewHolder extends RecyclerView.ViewHolder {
             }
         }
         else{
-            System.out.println("phone");
+            Intent intent = new Intent(context, StepsAndInstructionDetailActivity.class);
+
+           //Setup a Parcelable wrapper to pass the correct data to the activity
+            DataWrapper dw = new DataWrapper();
+            if(listOfIngredients != null && !listOfIngredients.isEmpty()){
+                dw.setIngredientsList(listOfIngredients);
+            }
+            else if(singleStep != null) {
+                dw.setSingleStep(singleStep);
+            }
+
+            intent.putExtra("data", Parcels.wrap(dw));
+            context.startActivity(intent);
         }
     }
 }
