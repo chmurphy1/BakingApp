@@ -54,7 +54,7 @@ public class RecipeDetailFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if(savedInstanceState != null ){
-            recipeDetails = savedInstanceState.getParcelable(Constants.RECIPE_KEY);
+            recipeDetails = Parcels.unwrap(savedInstanceState.getParcelable(Constants.RECIPE_KEY));
         }else{
            Bundle arguments = getArguments();
            recipeDetails = Parcels.unwrap(arguments.getParcelable(Constants.RECIPE_KEY));

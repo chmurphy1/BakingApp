@@ -22,7 +22,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         setContentView(R.layout.activity_recipe_details);
 
         if(savedInstanceState != null){
-            recipeDetails = savedInstanceState.getParcelable(Constants.RECIPE_KEY);
+            recipeDetails = Parcels.unwrap(savedInstanceState.getParcelable(Constants.RECIPE_KEY));
         }
         else{
             Intent intent = getIntent();
@@ -50,7 +50,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
 
         //Add the fragment for the recipe details to the fragment manager
         mgr.beginTransaction()
-                .add(R.id.recipeDetailFragment, detailFragment)
+                .replace(R.id.recipeDetailFragment, detailFragment)
                 .commit();
     }
 
