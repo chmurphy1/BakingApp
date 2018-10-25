@@ -5,13 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
+import murphy.christopher.bakingapp.utils.Constants;
+
 @Parcel(Parcel.Serialization.BEAN)
 public class Ingredients {
 
     @SerializedName("quantity")
     private double quantity;
 
-    @SerializedName("measurement")
+    @SerializedName("measure")
     private String measurement;
 
     @SerializedName("ingredient")
@@ -52,5 +54,9 @@ public class Ingredients {
 
     public void setIngredient(String ingredient) {
         this.ingredient = ingredient;
+    }
+
+    public String toString(){
+        return quantity + Constants.SPACE + measurement + Constants.SPACE + ingredient + Constants.NEWLINE;
     }
 }
