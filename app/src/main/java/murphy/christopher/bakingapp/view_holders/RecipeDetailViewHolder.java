@@ -66,10 +66,14 @@ public class RecipeDetailViewHolder extends RecyclerView.ViewHolder {
             //check to see if we have a list of incredients or
             //a set of steps
             if(listOfIngredients != null){
-                rdListener.onRecipeDetailCardClick((Object) listOfIngredients);
+                DataWrapper dw = new DataWrapper();
+                dw.setIngredientsList(listOfIngredients);
+                rdListener.onRecipeDetailCardClick(dw);
             }
             else if(singleStep != null){
-                rdListener.onRecipeDetailCardClick((Object) singleStep);
+                DataWrapper dw = new DataWrapper();
+                dw.setSingleStep(singleStep);
+                rdListener.onRecipeDetailCardClick(dw);
             }
         }
         else{

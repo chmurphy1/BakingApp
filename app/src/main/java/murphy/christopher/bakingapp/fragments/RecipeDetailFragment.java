@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import murphy.christopher.bakingapp.R;
 import murphy.christopher.bakingapp.adapter.RecipeDetailsAdapter;
 import murphy.christopher.bakingapp.interfaces.RecipeDetailCallback;
+import murphy.christopher.bakingapp.model.DataWrapper;
 import murphy.christopher.bakingapp.model.IngredientWrapper;
 import murphy.christopher.bakingapp.model.Ingredients;
 import murphy.christopher.bakingapp.model.Recipe;
@@ -37,7 +38,7 @@ public class RecipeDetailFragment extends Fragment {
     private RecipeDetailFragmentCallback callback;
 
     public interface RecipeDetailFragmentCallback {
-        public void onclick(Object data);
+        public void onclick(DataWrapper data);
     }
 
     @Nullable
@@ -89,7 +90,7 @@ public class RecipeDetailFragment extends Fragment {
             RecipeDetailCallback listener = new RecipeDetailCallback(){
 
                 @Override
-                public void onRecipeDetailCardClick(Object data) {
+                public void onRecipeDetailCardClick(DataWrapper data) {
                     callback.onclick(data);
                 }
             };
