@@ -11,6 +11,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 import murphy.christopher.bakingapp.fragments.RecipeIngredientsFragment;
+import murphy.christopher.bakingapp.fragments.RecipeInstructionFragment;
 import murphy.christopher.bakingapp.model.DataWrapper;
 import murphy.christopher.bakingapp.model.Ingredients;
 import murphy.christopher.bakingapp.model.Steps;
@@ -50,6 +51,18 @@ public class StepsAndInstructionDetailActivity extends AppCompatActivity {
 
             rdf.setArguments(arguments);
             attachFragment(rdf);
+        }else if(singleStep != null){
+            RecipeInstructionFragment rif = new RecipeInstructionFragment();
+
+            //Create a buntdle to pass arguements to fragment
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(Constants.SINGLE_STEP, Parcels.wrap(singleStep));
+
+            //Sends the fragment parameters
+            rif.setArguments(arguments);
+
+            //attaches the fragment to the activity
+            attachFragment(rif);
         }
     }
 

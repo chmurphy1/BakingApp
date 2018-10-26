@@ -7,7 +7,8 @@ public class Constants {
     public static final String INGREDIENT_LIST = "ingredient_list";
     public static final String SINGLE_STEP = "single_step";
     public static final String SPACE = " ";
-    public static final String NEWLINE = "\n";
+    public static final String BLANKS = "";
+    public static final String NEWLINE = "\n" ;
 
     //needs internationalization later
     public static final String INGREDIENT_STRING = "Ingredients";

@@ -31,7 +31,7 @@ public class RecipeIngredientsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        String ingredientList = "";
+        String ingredientList = Constants.BLANKS;
         if(savedInstanceState != null){
             ingredientList = savedInstanceState.getString(Constants.INGREDIENT_LIST);
         }
