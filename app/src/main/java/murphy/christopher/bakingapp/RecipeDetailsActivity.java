@@ -13,6 +13,7 @@ import java.util.List;
 
 import murphy.christopher.bakingapp.fragments.RecipeDetailFragment;
 import murphy.christopher.bakingapp.fragments.RecipeIngredientsFragment;
+import murphy.christopher.bakingapp.fragments.RecipeInstructionFragment;
 import murphy.christopher.bakingapp.model.DataWrapper;
 import murphy.christopher.bakingapp.model.Ingredients;
 import murphy.christopher.bakingapp.model.Recipe;
@@ -89,7 +90,14 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
             attachFragment(rdf);
         }
         else if(data.getSingleStep() != null){
+            RecipeInstructionFragment rif = new RecipeInstructionFragment();
 
+            //Create bundle for the Fragment
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(Constants.SINGLE_STEP, Parcels.wrap(data.getSingleStep()));
+
+            rif.setArguments(arguments);
+            attachFragment(rif);
         }
     }
     public void attachFragment(Fragment frag){
