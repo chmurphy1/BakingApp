@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
+import murphy.christopher.bakingapp.utils.Constants;
+
 @Parcel(Parcel.Serialization.BEAN)
 public class Steps {
 

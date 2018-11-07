@@ -9,6 +9,7 @@ public class Constants {
     public static final String SPACE = " ";
     public static final String BLANKS = "";
     public static final String NEWLINE = "\n" ;
+    public static final String PLAYER_POS = "position";
 
     //needs internationalization later
     public static final String INGREDIENT_STRING = "Ingredients";

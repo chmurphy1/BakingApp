@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import org.parceler.Parcels;
 
@@ -20,7 +21,7 @@ import murphy.christopher.bakingapp.model.Recipe;
 import murphy.christopher.bakingapp.model.Steps;
 import murphy.christopher.bakingapp.utils.Constants;
 
-public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailFragment.RecipeDetailFragmentCallback{
+public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailFragment.RecipeDetailFragmentCallback, RecipeInstructionFragment.PlayerError{
 
     private Recipe recipeDetails;
 
@@ -107,5 +108,20 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         mgr.beginTransaction()
                 .replace(R.id.recipeInstructionFragment, frag)
                 .commit();
+    }
+
+    @Override
+    public void onAttachFragment(android.support.v4.app.Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        if (fragment instanceof RecipeInstructionFragment) {
+            RecipeInstructionFragment instruction = (RecipeInstructionFragment) fragment;
+            instruction.setErrorNotification(this);
+        }
+    }
+
+    @Override
+    public void onError(){
+        Toast.makeText(this,"An error occured while attempting to play the video.",Toast.LENGTH_LONG).show();
     }
 }

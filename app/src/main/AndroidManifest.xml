@@ -21,8 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecipeDetailsActivity" />
-        <activity android:name=".StepsAndInstructionDetailActivity"></activity>
+        <activity android:name=".RecipeDetailsActivity"
+                  android:launchMode="singleTop"
+                  android:parentActivityName=".MainActivity"/>
+        <activity android:name=".StepsAndInstructionDetailActivity"
+                  android:parentActivityName=".RecipeDetailsActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 
 </manifest>

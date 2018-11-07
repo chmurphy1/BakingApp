@@ -1,7 +1,10 @@
 package murphy.christopher.bakingapp.fragments;
 
+
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,35 +12,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-
 import org.parceler.Parcels;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import murphy.christopher.bakingapp.R;
 import murphy.christopher.bakingapp.model.Steps;
 import murphy.christopher.bakingapp.utils.Constants;
 
-public class RecipeInstructionFragment extends Fragment{
+public class RecipeInstructionFragment extends Fragment implements Player.EventListener {
 
     private Steps singleStep;
 
@@ -45,9 +43,15 @@ public class RecipeInstructionFragment extends Fragment{
     TextView stepDescription;
 
     @BindView(R.id.VideoPlayer)
-    SimpleExoPlayerView videoPlayerView;
+    PlayerView videoPlayerView;
 
     private SimpleExoPlayer videoPlayer;
+
+    public interface PlayerError{
+        void onError();
+    }
+
+    PlayerError errorNotification;
 
     @Nullable
     @Override
@@ -84,17 +88,23 @@ public class RecipeInstructionFragment extends Fragment{
 
     private void initializePlayer(Uri mediaUri) {
         if (videoPlayer == null) {
+            Handler handle = new Handler();
+
             TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-            videoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+            videoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
 
             videoPlayerView.setPlayer(videoPlayer);
 
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(getContext(), getActivity().getApplication().getApplicationInfo().name);
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
-                    getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
-            videoPlayer.prepare(mediaSource);
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
+
+            MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(mediaUri);
+
+            videoPlayer.addListener(this);
+            videoPlayer.prepare(videoSource);
+
             videoPlayer.setPlayWhenReady(true);
         }
     }
@@ -102,8 +112,94 @@ public class RecipeInstructionFragment extends Fragment{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        if(videoPlayer != null) {
+            videoPlayer.stop();
+            videoPlayer.release();
+            videoPlayer = null;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if(videoPlayer != null) {
+            videoPlayer.setPlayWhenReady(false);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(videoPlayer != null) {
+            videoPlayer.setPlayWhenReady(true);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+
+        }
+    }
+
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+    }
+
+    @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+        errorNotification.onError();
         videoPlayer.stop();
         videoPlayer.release();
-        videoPlayer = null;
+        error.printStackTrace();
+    }
+
+    @Override
+    public void onPositionDiscontinuity(int reason) {
+
+    }
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+    }
+
+    @Override
+    public void onSeekProcessed() {
+
+    }
+    public void setErrorNotification(PlayerError errorNotification) {
+        this.errorNotification = errorNotification;
     }
 }
