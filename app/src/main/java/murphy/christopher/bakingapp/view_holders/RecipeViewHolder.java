@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import org.parceler.Parcels;
 
@@ -25,6 +28,9 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.recipeName)
     TextView cardName;
 
+    @BindView(R.id.recipeImage)
+    ImageView recipeImage;
+
     public RecipeViewHolder(View itemView) {
         super(itemView);
         context = itemView.getContext();
@@ -32,6 +38,11 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
     }
     public void bind(Recipe recipe){
         this.recipe = recipe;
+
+        Glide.with(context)
+                .load(recipe.getImage())
+                .into(recipeImage);
+
         cardName.setText(recipe.getName());
     }
     @OnClick(R.id.RecipeCard)

@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
 import org.parceler.Parcels;
 import java.util.List;
 import butterknife.BindView;
@@ -30,6 +34,9 @@ public class RecipeDetailViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.recipeDetailName)
     TextView cardDetailName;
 
+    @BindView(R.id.recipeThumbnail)
+    ImageView thumbnail;
+
     public RecipeDetailViewHolder(View itemView) {
         super(itemView);
         context = itemView.getContext();
@@ -54,6 +61,10 @@ public class RecipeDetailViewHolder extends RecyclerView.ViewHolder {
         else if(o instanceof Steps){
             singleStep = (Steps) o;
             cardDetailName.setText(singleStep.getShortDescription());
+
+            Glide.with(context)
+                    .load(singleStep.getThumbnailURL())
+                    .into(thumbnail);
         }
     }
 
