@@ -21,12 +21,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecipeDetailsActivity"
-                  android:launchMode="singleTop"
-                  android:parentActivityName=".MainActivity"/>
-        <activity android:name=".StepsAndInstructionDetailActivity"
-                  android:parentActivityName=".RecipeDetailsActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".RecipeDetailsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".StepsAndInstructionDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:parentActivityName=".RecipeDetailsActivity" />
+
+        <receiver android:name=".RecipeWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

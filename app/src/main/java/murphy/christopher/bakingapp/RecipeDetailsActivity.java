@@ -1,11 +1,15 @@
 package murphy.christopher.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import org.parceler.Parcels;
@@ -61,6 +65,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         mgr.beginTransaction()
                 .replace(R.id.recipeDetailFragment, detailFragment)
                 .commit();
+
+        sendIngredientsToWidget();
     }
 
     @Override
@@ -123,5 +129,21 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
     @Override
     public void onError(){
         Toast.makeText(this,"An error occured while attempting to play the video.",Toast.LENGTH_LONG).show();
+    }
+
+    private void sendIngredientsToWidget(){
+        Context context = this;
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
+        ComponentName thisWidget = new ComponentName(context,RecipeWidget.class);
+
+        StringBuilder sb = new StringBuilder();
+        List<Ingredients> ingredients = recipeDetails.getIngredients();
+        for(Ingredients ingredient : ingredients){
+            sb.append(ingredient.toString());
+        }
+
+        remoteViews.setTextViewText(R.id.appwidget_text, sb.toString());
+        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
     }
 }
