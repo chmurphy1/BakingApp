@@ -36,34 +36,39 @@ public class StepsAndInstructionDetailActivity extends AppCompatActivity impleme
             ingredientsList = Parcels.unwrap(savedInstanceState.getParcelable(Constants.INGREDIENT_LIST));
         }
 
-        if((ingredientsList != null) && !(ingredientsList.isEmpty())){
-            StringBuilder ingredientBuilder = new StringBuilder();
+        FragmentManager mgr = getSupportFragmentManager();
+        Fragment fgr = mgr.findFragmentById(R.id.recipeInstructionFragment);
 
-            for (Ingredients singleIngredient : ingredientsList) {
-                ingredientBuilder.append(singleIngredient.toString());
+        if(fgr == null) {
+            if ((ingredientsList != null) && !(ingredientsList.isEmpty())) {
+                StringBuilder ingredientBuilder = new StringBuilder();
+
+                for (Ingredients singleIngredient : ingredientsList) {
+                    ingredientBuilder.append(singleIngredient.toString());
+                }
+
+                //Setup new ingredient fragment
+                RecipeIngredientsFragment rdf = new RecipeIngredientsFragment();
+
+                //Create bundle for the Fragment
+                Bundle arguments = new Bundle();
+                arguments.putString(Constants.INGREDIENT_LIST, ingredientBuilder.toString());
+
+                rdf.setArguments(arguments);
+                attachFragment(rdf);
+            } else if (singleStep != null) {
+                RecipeInstructionFragment rif = new RecipeInstructionFragment();
+
+                //Create a buntdle to pass arguements to fragment
+                Bundle arguments = new Bundle();
+                arguments.putParcelable(Constants.SINGLE_STEP, Parcels.wrap(singleStep));
+
+                //Sends the fragment parameters
+                rif.setArguments(arguments);
+
+                //attaches the fragment to the activity
+                attachFragment(rif);
             }
-
-            //Setup new ingredient fragment
-            RecipeIngredientsFragment rdf = new RecipeIngredientsFragment();
-
-            //Create bundle for the Fragment
-            Bundle arguments = new Bundle();
-            arguments.putString(Constants.INGREDIENT_LIST, ingredientBuilder.toString());
-
-            rdf.setArguments(arguments);
-            attachFragment(rdf);
-        }else if(singleStep != null){
-            RecipeInstructionFragment rif = new RecipeInstructionFragment();
-
-            //Create a buntdle to pass arguements to fragment
-            Bundle arguments = new Bundle();
-            arguments.putParcelable(Constants.SINGLE_STEP, Parcels.wrap(singleStep));
-
-            //Sends the fragment parameters
-            rif.setArguments(arguments);
-
-            //attaches the fragment to the activity
-            attachFragment(rif);
         }
     }
 
@@ -72,7 +77,7 @@ public class StepsAndInstructionDetailActivity extends AppCompatActivity impleme
 
         //Add the fragment to the fragment manager
         mgr.beginTransaction()
-                .replace(R.id.recipeInstructionFragment, frag)
+                .add(R.id.recipeInstructionFragment, frag)
                 .commit();
     }
 
