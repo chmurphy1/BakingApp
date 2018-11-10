@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -46,6 +48,8 @@ public class RecipeInstructionFragment extends Fragment implements Player.EventL
     PlayerView videoPlayerView;
 
     private SimpleExoPlayer videoPlayer;
+    private long playerPos = C.TIME_UNSET;
+    private Uri videoUri;
 
     public interface PlayerError{
         void onError();
@@ -69,6 +73,7 @@ public class RecipeInstructionFragment extends Fragment implements Player.EventL
 
         if(savedInstanceState != null){
             singleStep = Parcels.unwrap(savedInstanceState.getParcelable(Constants.SINGLE_STEP));
+            playerPos = savedInstanceState.getLong("CURRENT_POSITION");
         }
         else {
             Bundle args = getArguments();
@@ -76,14 +81,15 @@ public class RecipeInstructionFragment extends Fragment implements Player.EventL
         }
 
         stepDescription.setText(singleStep.getDescription());
-
-        initializePlayer(Uri.parse(singleStep.getVideoURL()));
+        videoUri = Uri.parse(singleStep.getVideoURL());
+        initializePlayer(videoUri);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(Constants.SINGLE_STEP, Parcels.wrap(singleStep));
+        outState.putLong("CURRENT_POSITION", playerPos);
     }
 
     private void initializePlayer(Uri mediaUri) {
@@ -105,6 +111,9 @@ public class RecipeInstructionFragment extends Fragment implements Player.EventL
             videoPlayer.addListener(this);
             videoPlayer.prepare(videoSource);
 
+            if (playerPos != C.TIME_UNSET) {
+                videoPlayer.seekTo(playerPos);
+            }
             videoPlayer.setPlayWhenReady(true);
         }
     }
@@ -123,28 +132,19 @@ public class RecipeInstructionFragment extends Fragment implements Player.EventL
     @Override
     public void onPause() {
         super.onPause();
-
-        if(videoPlayer != null) {
-            videoPlayer.setPlayWhenReady(false);
+        if (videoPlayer != null) {
+            playerPos = videoPlayer.getCurrentPosition();
+            videoPlayer.stop();
+            videoPlayer.release();
+            videoPlayer = null;
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if(videoPlayer != null) {
-            videoPlayer.setPlayWhenReady(true);
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-
-        }
+        if (videoUri != null)
+            initializePlayer(videoUri);
     }
 
     @Override

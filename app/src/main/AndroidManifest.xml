@@ -27,7 +27,6 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".StepsAndInstructionDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".RecipeDetailsActivity" />
 
         <receiver android:name=".RecipeWidget">
