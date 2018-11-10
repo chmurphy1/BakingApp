@@ -3,6 +3,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
+
 import org.parceler.Parcels;
 import java.util.List;
 import butterknife.BindView;
@@ -109,11 +111,11 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                    //throw an error
+                    t.printStackTrace();
                 }
             });
         }else{
-            //put some toast in here
+            Toast.makeText(this,"A networking issue has occurred, please try again later.",Toast.LENGTH_LONG).show();
         }
     }
 

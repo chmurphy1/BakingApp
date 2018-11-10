@@ -99,7 +99,7 @@ public class StepsAndInstructionDetailActivity extends AppCompatActivity impleme
         }
     }
     public void onError(){
-        Toast.makeText(this,"An error occured while attempting to play the video.",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"An error occurred while attempting to play the video.",Toast.LENGTH_LONG).show();
     }
 
     @Override
