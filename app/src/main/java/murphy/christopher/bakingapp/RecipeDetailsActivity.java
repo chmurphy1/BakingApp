@@ -51,21 +51,23 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         }
 
         FragmentManager mgr = getSupportFragmentManager();
+        Fragment fgr = mgr.findFragmentById(R.id.recipeDetailFragment);
 
-        //These are the fragments that will be loaded in this activity
-        //for the tablet.
-        RecipeDetailFragment detailFragment = new RecipeDetailFragment();
+        if(fgr == null) {
+            //These are the fragments that will be loaded in this activity
+            //for the tablet.
+            RecipeDetailFragment detailFragment = new RecipeDetailFragment();
 
-        //Save the recipe details to use in the fragment
-        Bundle arguments = new Bundle();
-        arguments.putParcelable(Constants.RECIPE_KEY, Parcels.wrap(recipeDetails));
-        detailFragment.setArguments(arguments);
+            //Save the recipe details to use in the fragment
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(Constants.RECIPE_KEY, Parcels.wrap(recipeDetails));
+            detailFragment.setArguments(arguments);
 
-        //Add the fragment for the recipe details to the fragment manager
-        mgr.beginTransaction()
-                .replace(R.id.recipeDetailFragment, detailFragment)
-                .commit();
-
+            //Add the fragment for the recipe details to the fragment manager
+            mgr.beginTransaction()
+                    .replace(R.id.recipeDetailFragment, detailFragment)
+                    .commit();
+        }
         sendIngredientsToWidget();
     }
 

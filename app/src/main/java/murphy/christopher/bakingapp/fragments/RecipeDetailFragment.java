@@ -36,6 +36,8 @@ public class RecipeDetailFragment extends Fragment {
     RecyclerView recipeReviewRecylcer;
 
     private RecipeDetailFragmentCallback callback;
+    private LinearLayoutManager layoutMgr;
+    private int scrollPos;
 
     public interface RecipeDetailFragmentCallback {
         public void onclick(DataWrapper data);
@@ -56,15 +58,17 @@ public class RecipeDetailFragment extends Fragment {
 
         if(savedInstanceState != null ){
             recipeDetails = Parcels.unwrap(savedInstanceState.getParcelable(Constants.RECIPE_KEY));
+            scrollPos = savedInstanceState.getInt("Visible Item");
         }else{
            Bundle arguments = getArguments();
            recipeDetails = Parcels.unwrap(arguments.getParcelable(Constants.RECIPE_KEY));
         }
 
-        LinearLayoutManager layoutMgr = new LinearLayoutManager(getContext());
+        layoutMgr = new LinearLayoutManager(getContext());
         recipeReviewRecylcer.setLayoutManager(layoutMgr);
         recipeReviewRecylcer.setHasFixedSize(true);
         recipeReviewRecylcer.setAdapter(setupRecipeDetailAdapter());
+        layoutMgr.scrollToPosition(scrollPos);
     }
 
     //This function places the data for the ingredients and steps
@@ -105,6 +109,7 @@ public class RecipeDetailFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(Constants.RECIPE_KEY, Parcels.wrap(recipeDetails));
+        outState.putInt("Visible Item",layoutMgr.findFirstCompletelyVisibleItemPosition());
     }
 
     @Override
